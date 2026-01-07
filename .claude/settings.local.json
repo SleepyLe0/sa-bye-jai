@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:seraui.com)",
+      "Bash(cargo new:*)",
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(cargo:*)",
+      "Bash(rustc:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tailwindcss:*)"
+    ]
+  }
+}
