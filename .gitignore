@@ -114,3 +114,11 @@ jspm_packages/
 # Backup files
 *.bak
 *.backup
+backup.sql
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Claude code
+.claude/

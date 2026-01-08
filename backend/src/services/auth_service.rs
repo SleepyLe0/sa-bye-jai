@@ -1,5 +1,4 @@
 use sqlx::PgPool;
-use uuid::Uuid;
 
 use crate::models::user::{AuthResponse, CreateUserRequest, LoginRequest, User};
 use crate::utils::{jwt, password};

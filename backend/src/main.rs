@@ -30,20 +30,23 @@ async fn main() {
     // Database connection pool
     let pool = database::connection::create_pool().await;
 
+    // Run migrations
+    tracing::info!("Running database migrations...");
+    sqlx::migrate!("./migrations")
+        .run(&pool)
+        .await
+        .expect("Failed to run migrations");
+
     // Configure CORS
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
         .allow_headers(Any);
 
-    // Build router
-    let app = Router::new()
-        .route("/health", get(health_check))
-        // Auth routes
-        .route("/api/auth/register", post(handlers::auth::register))
-        .route("/api/auth/login", post(handlers::auth::login))
+    // Build protected routes that require authentication
+    let protected_routes = Router::new()
         .route("/api/auth/me", get(handlers::auth::me))
-        // Mental box routes (protected)
+        // Mental box routes
         .route(
             "/api/mental-box",
             get(handlers::mental_box::list).post(handlers::mental_box::create),
@@ -54,18 +57,33 @@ async fn main() {
                 .put(handlers::mental_box::update)
                 .delete(handlers::mental_box::delete),
         )
-        // Worry window routes (protected)
+        // Mood tracker routes
         .route(
-            "/api/worry-window",
-            get(handlers::worry_window::list).post(handlers::worry_window::create),
+            "/api/mood-tracker",
+            get(handlers::mood_tracker::list).post(handlers::mood_tracker::create),
         )
         .route(
-            "/api/worry-window/:id",
-            get(handlers::worry_window::get_by_id)
-                .put(handlers::worry_window::update)
-                .delete(handlers::worry_window::delete),
+            "/api/mood-tracker/:id",
+            get(handlers::mood_tracker::get_by_id)
+                .put(handlers::mood_tracker::update)
+                .delete(handlers::mood_tracker::delete),
         )
-        .route("/api/worry-window/today", get(handlers::worry_window::get_today))
+        .route("/api/mood-tracker/recent", get(handlers::mood_tracker::get_recent))
+        .route("/api/mood-tracker/stats", get(handlers::mood_tracker::get_stats))
+        .route_layer(axum::middleware::from_fn_with_state(
+            pool.clone(),
+            crate::middleware::auth::auth_middleware,
+        ));
+
+    // Build public routes
+    let public_routes = Router::new()
+        .route("/health", get(health_check))
+        .route("/api/auth/register", post(handlers::auth::register))
+        .route("/api/auth/login", post(handlers::auth::login));
+
+    // Combine routes
+    let app = public_routes
+        .merge(protected_routes)
         .layer(cors)
         .with_state(pool);
 

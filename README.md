@@ -60,6 +60,56 @@ sabyejai/
     └── .env                    # Frontend env vars
 ```
 
+## 🐳 Docker Deployment (Recommended)
+
+The easiest way to run the entire application is using Docker Compose:
+
+### Quick Start with Docker
+
+```bash
+# Build and start all services (database, backend, frontend)
+docker-compose up --build
+
+# Or run in background
+docker-compose up -d --build
+```
+
+Access the application:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **Database**: localhost:5432
+
+### Using Helper Scripts
+
+**Windows (Batch Script):**
+```cmd
+docker.bat up      # Start all services
+docker.bat logs    # View logs
+docker.bat down    # Stop all services
+```
+
+**Linux/Mac (Makefile):**
+```bash
+make up           # Start all services
+make logs         # View logs
+make down         # Stop all services
+```
+
+For detailed Docker instructions, see [DOCKER.md](DOCKER.md)
+
+### What Docker Compose Does
+
+✅ Sets up PostgreSQL database automatically
+✅ Builds and runs the Rust backend
+✅ Builds and runs the React frontend
+✅ Runs database migrations automatically
+✅ Configures networking between services
+✅ Handles service dependencies
+
+No need to install PostgreSQL, Rust, or Node.js locally!
+
+---
+
 ## Features
 
 ### 1. Mental Box (กล่องเก็บปัญหา)
@@ -268,19 +318,31 @@ npm run lint                    # Lint code
 ✅ Tailwind CSS configured
 ✅ Path aliases configured
 ✅ Environment variables setup
+✅ Docker Compose configuration
+✅ i18n configuration and translation files (English + Thai)
+✅ ThemeContext for dark mode
+✅ AuthContext and authentication services
+✅ SeraUI components (Button, Card, Input, Form, Dialog)
+✅ Header and Layout components
+✅ Authentication pages (Login, Register)
+✅ Mental Box feature (full CRUD functionality)
+✅ Worry Window feature (scheduling and completion)
+✅ Breathing Exercise component (4-7-8 technique)
+✅ Dashboard page
+✅ Routing with protected routes
 
-## Next Steps
+## Development Status
 
-1. ⏳ Create i18n configuration and translation files
-2. ⏳ Implement ThemeContext for dark mode
-3. ⏳ Implement AuthContext and auth services
-4. ⏳ Add SeraUI components (Button, Card, Input, Form, Dialog)
-5. ⏳ Create authentication pages (Login, Register)
-6. ⏳ Implement Mental Box feature (frontend + backend)
-7. ⏳ Implement Worry Window feature (frontend + backend)
-8. ⏳ Implement Breathing Exercise component
-9. ⏳ Create Dashboard page
-10. ⏳ Final testing and polish
+All core features have been implemented! The application is ready for development testing.
+
+To test the application:
+1. Start services with Docker Compose: `docker-compose up --build`
+2. Access the frontend at http://localhost:3000
+3. Register a new account or login
+4. Test all three features:
+   - Mental Box: Store and manage your worries
+   - Worry Window: Schedule worry time slots
+   - Grounding: Practice 4-7-8 breathing exercises
 
 ## Contributing
 
