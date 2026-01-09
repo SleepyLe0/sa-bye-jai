@@ -9,10 +9,11 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90 hover:scale-105 shadow-lg hover:shadow-xl",
         destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90 hover:scale-105 shadow-lg hover:shadow-xl",
-        outline: "glass border-2 border-white/30 hover:border-white/50 hover:scale-105",
-        secondary: "glass hover:scale-105",
+        outline: "liquid-glass border-2 border-white/30 hover:border-white/50 hover:scale-105",
+        secondary: "liquid-glass hover:scale-105",
         ghost: "hover:bg-white/10 hover:backdrop-blur-sm rounded-lg",
         link: "text-primary underline-offset-4 hover:underline",
+        liquidGlass: "liquid-glass-button text-foreground hover:scale-105",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -38,6 +39,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, ...props }, ref) => {
     return (
       <button
+        data-cursor-magnetic
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}

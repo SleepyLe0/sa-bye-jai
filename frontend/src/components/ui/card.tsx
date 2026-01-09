@@ -7,8 +7,9 @@ const Card = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
+    data-cursor-magnetic
     className={cn(
-      "glass-card glass-hover text-card-foreground",
+      "liquid-glass-hover rounded-3xl text-card-foreground",
       className
     )}
     {...props}

@@ -1,15 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Moon, Sun, LogOut, Menu, Globe } from 'lucide-react';
+import { LogOut, Menu, Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
-import { useTheme } from '@/context/ThemeContext';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 export function Header() {
   const { t, i18n } = useTranslation();
   const { user, logout, isAuthenticated } = useAuth();
-  const { setTheme, actualTheme } = useTheme();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -18,17 +16,13 @@ export function Header() {
     navigate('/login');
   };
 
-  const toggleTheme = () => {
-    setTheme(actualTheme === 'dark' ? 'light' : 'dark');
-  };
-
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'th' : 'en';
     i18n.changeLanguage(newLang);
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full md:flex md:justify-center glass border-b border-white/20">
+    <header className="sticky top-0 z-50 w-full md:flex md:justify-center liquid-glass border-b border-white/20">
       <div className="container flex h-16 justify-between items-center px-4">
         {/* Logo - Fixed Width */}
         <div className="w-32">
@@ -70,7 +64,7 @@ export function Header() {
         {/* Spacer for non-authenticated users */}
         {!isAuthenticated && <div className="flex-1" />}
 
-        {/* Right side actions - Fixed Width to Match Logo */}
+        {/* Right side actions */}
         <div className="flex items-center space-x-2 w-32 justify-end">
           {/* Language Toggle */}
           <Button
@@ -81,21 +75,6 @@ export function Header() {
           >
             <Globe className="h-5 w-5" />
             <span className="sr-only">{t('language.changeLanguage')}</span>
-          </Button>
-
-          {/* Theme Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            title={t('theme.toggleTheme')}
-          >
-            {actualTheme === 'dark' ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-            <span className="sr-only">{t('theme.toggleTheme')}</span>
           </Button>
 
           {/* User Actions */}
@@ -137,7 +116,7 @@ export function Header() {
       {/* Mobile Menu */}
       {isAuthenticated && mobileMenuOpen && (
         <div className="md:hidden border-t border-white/20">
-          <nav className="container flex flex-col space-y-2 p-4 glass">
+        <nav className="container flex flex-col space-y-2 p-4 liquid-glass">
             <Link
               to="/dashboard"
               className="py-2 text-sm font-medium hover:text-primary"

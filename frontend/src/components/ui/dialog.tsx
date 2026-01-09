@@ -37,11 +37,11 @@ const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => (
-  <div className="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] w-full max-w-lg">
+  <div className="fixed left-[50%] top-[50%] z-50 translate-x-[-50%] translate-y-[-50%] w-full max-w-lg p-4">
     <div
       ref={ref}
       className={cn(
-        "grid w-full gap-4 border bg-background p-6 shadow-lg rounded-lg",
+        "grid w-full gap-4 liquid-glass rounded-2xl p-6 shadow-2xl",
         className
       )}
       {...props}
