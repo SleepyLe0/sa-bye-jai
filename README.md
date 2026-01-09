@@ -105,6 +105,7 @@ For detailed Docker instructions, see [DOCKER.md](DOCKER.md)
 ✅ Runs database migrations automatically
 ✅ Configures networking between services
 ✅ Handles service dependencies
+✅ Uses `env_file` to load environment variables from `.env` files
 
 No need to install PostgreSQL, Rust, or Node.js locally!
 
@@ -117,6 +118,12 @@ No need to install PostgreSQL, Rust, or Node.js locally!
 - View all stored entries
 - Edit and delete entries
 - Full CRUD with backend persistence
+- **AI-Powered Stress Reframing**: Get cognitive reframes using Google Gemini 2.5 Flash
+  - Stoic perspective: Focus on what you can control
+  - Optimist perspective: Find the silver lining
+  - Realist perspective: Balanced, practical view
+  - Results are cached to reduce API token usage
+  - Responds in the same language as your input (Thai/English)
 
 ### 2. Worry Window (ช่วงเวลาเครียด)
 - Schedule specific time slots for thinking about problems
@@ -219,9 +226,10 @@ JWT_SECRET=your-super-secret-jwt-key-change-in-production
 JWT_EXPIRATION=900              # 15 minutes
 REFRESH_TOKEN_EXPIRATION=604800 # 7 days
 RUST_LOG=info
-SERVER_HOST=127.0.0.1
+SERVER_HOST=127.0.0.1           # Use 0.0.0.0 for Docker
 SERVER_PORT=8000
 CORS_ORIGIN=http://localhost:5173
+OPENROUTER_API_KEY=your-openrouter-api-key  # Required for AI reframing
 ```
 
 **Important**: Change `JWT_SECRET` and `DATABASE_URL` password in production!
@@ -253,6 +261,10 @@ VITE_API_BASE_URL=http://localhost:8000/api
 - `PUT /api/worry-window/:id` - Update schedule
 - `DELETE /api/worry-window/:id` - Delete schedule
 - `GET /api/worry-window/today` - Get today's schedules
+
+### Stress Reframe (Protected)
+- `POST /api/stress-reframe` - Create AI-powered reframe (returns cached result if exists)
+- `GET /api/stress-reframe` - List all user's reframes
 
 ### Health
 - `GET /health` - Health check

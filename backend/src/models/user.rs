@@ -33,4 +33,10 @@ pub struct LoginRequest {
 pub struct AuthResponse {
     pub user: User,
     pub token: String,
+    pub refresh_token: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct RefreshTokenRequest {
+    pub refresh_token: String,
 }

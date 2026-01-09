@@ -79,7 +79,9 @@
     "saveSuccess": "Entry saved successfully",
     "loadError": "Failed to load entries",
     "createdAt": "Created",
-    "updatedAt": "Updated"
+    "updatedAt": "Updated",
+    "reframe": "Reframe This Thought",
+    "reframeTitle": "AI-Powered Cognitive Reframing"
   },
   "moodTracker": {
     "title": "Mood Tracker",
@@ -175,5 +177,26 @@
     "minLength": "Must be at least {{min}} characters",
     "maxLength": "Must be no more than {{max}} characters",
     "passwordMatch": "Passwords must match"
+  },
+  "stressReframe": {
+    "title": "Stress Reframing",
+    "subtitle": "Transform your stressful thoughts with AI-powered cognitive reframing",
+    "shareThought": "Share Your Stressful Thought",
+    "thoughtDescription": "Type any thought that's causing you stress or anxiety",
+    "placeholder": "Example: I'm going to fail this presentation...",
+    "example": "Be honest and specific for best results",
+    "enterThought": "Please enter a thought to reframe",
+    "tooLong": "Thought is too long. Please keep it under 1000 characters",
+    "generating": "AI is reframing your thought...",
+    "reframeButton": "Reframe My Thought",
+    "originalThought": "Your Original Thought",
+    "stoic": "The Stoic",
+    "stoicDesc": "Focus on what you can control",
+    "optimist": "The Optimist",
+    "optimistDesc": "Find the opportunity in the situation",
+    "realist": "The Realist",
+    "realistDesc": "A balanced, practical perspective",
+    "reframeAnother": "Reframe Another Thought",
+    "aiPowered": "AI-Powered Cognitive Reframing"
   }
 }

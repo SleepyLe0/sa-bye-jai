@@ -6,8 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { mentalBoxService } from '@/services/mental-box.service';
+import { stressReframeService } from '@/services/stress-reframe.service';
 import type { MentalBoxEntry } from '@/types/mental-box.types';
-import { Trash2, Plus } from 'lucide-react';
+import type { ReframeResponse } from '@/types/stress-reframe.types';
+import { Trash2, Plus, Brain, Mountain, Smile, Target } from 'lucide-react';
 
 export function MentalBoxPage() {
   const { t } = useTranslation();
@@ -18,6 +20,9 @@ export function MentalBoxPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [reframeEntry, setReframeEntry] = useState<MentalBoxEntry | null>(null);
+  const [reframes, setReframes] = useState<ReframeResponse | null>(null);
+  const [reframing, setReframing] = useState(false);
 
   useEffect(() => {
     loadEntries();
@@ -76,6 +81,30 @@ export function MentalBoxPage() {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const handleReframe = async (entry: MentalBoxEntry) => {
+    setReframeEntry(entry);
+    setReframing(true);
+    setError('');
+
+    try {
+      const result = await stressReframeService.create({
+        mental_box_id: entry.id,
+        original_thought: entry.content,
+      });
+      setReframes(result);
+    } catch (err: any) {
+      setError(err.response?.data?.message || t('errors.saveFailed'));
+      setReframeEntry(null);
+    } finally {
+      setReframing(false);
+    }
+  };
+
+  const closeReframeDialog = () => {
+    setReframeEntry(null);
+    setReframes(null);
   };
 
   if (loading) {
@@ -146,13 +175,105 @@ export function MentalBoxPage() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent className="pt-0 space-y-3">
                 <p className="text-sm md:text-base text-muted-foreground whitespace-pre-wrap line-clamp-6">{entry.content}</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleReframe(entry)}
+                  disabled={reframing}
+                  className="w-full md:w-auto"
+                >
+                  <Brain className="h-4 w-4 mr-2" />
+                  {t('mentalBox.reframe')}
+                </Button>
               </CardContent>
             </Card>
           ))}
         </div>
       )}
+
+      {/* Reframe Dialog */}
+      <Dialog open={reframeEntry !== null} onOpenChange={closeReframeDialog}>
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-lg">
+              <Brain className="h-5 w-5 text-primary" />
+              {t('mentalBox.reframeTitle')}
+            </DialogTitle>
+            <DialogDescription className="text-sm">
+              {reframeEntry?.title}
+            </DialogDescription>
+          </DialogHeader>
+
+          {reframing ? (
+            <div className="flex flex-col items-center justify-center py-8 space-y-4">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary border-r-transparent" />
+              <p className="text-muted-foreground">{t('stressReframe.generating')}</p>
+            </div>
+          ) : reframes ? (
+            <div className="space-y-4">
+              {/* Original Thought */}
+              <Card className="bg-muted/50">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium">{t('stressReframe.originalThought')}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm text-muted-foreground italic">"{reframes.original_thought}"</p>
+                </CardContent>
+              </Card>
+
+              {/* Stoic Reframe */}
+              <Card className="border-2 border-blue-500/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400">
+                    <Mountain className="h-4 w-4" />
+                    {t('stressReframe.stoic')}
+                  </CardTitle>
+                  <CardDescription className="text-xs">{t('stressReframe.stoicDesc')}</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm leading-relaxed">{reframes.stoic_reframe}</p>
+                </CardContent>
+              </Card>
+
+              {/* Optimist Reframe */}
+              <Card className="border-2 border-green-500/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                    <Smile className="h-4 w-4" />
+                    {t('stressReframe.optimist')}
+                  </CardTitle>
+                  <CardDescription className="text-xs">{t('stressReframe.optimistDesc')}</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm leading-relaxed">{reframes.optimist_reframe}</p>
+                </CardContent>
+              </Card>
+
+              {/* Realist Reframe */}
+              <Card className="border-2 border-purple-500/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400">
+                    <Target className="h-4 w-4" />
+                    {t('stressReframe.realist')}
+                  </CardTitle>
+                  <CardDescription className="text-xs">{t('stressReframe.realistDesc')}</CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <p className="text-sm leading-relaxed">{reframes.realist_reframe}</p>
+                </CardContent>
+              </Card>
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button onClick={closeReframeDialog} className="w-full h-12">
+              {t('common.close')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Add Entry Dialog - Mobile Optimized */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>

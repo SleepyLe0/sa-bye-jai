@@ -22,4 +22,9 @@ export interface RegisterRequest {
 export interface AuthResponse {
   user: User;
   token: string;
+  refresh_token: string;
+}
+
+export interface RefreshTokenRequest {
+  refresh_token: string;
 }

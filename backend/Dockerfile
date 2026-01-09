@@ -41,9 +41,6 @@ COPY --from=builder /app/target/release/sabyejai-backend /app/backend
 # Copy migrations
 COPY --from=builder /app/migrations /app/migrations
 
-# Copy .env file (will be overridden by docker-compose environment variables)
-COPY .env.docker /app/.env
-
 # Copy entrypoint script
 COPY entrypoint.sh /app/entrypoint.sh
 

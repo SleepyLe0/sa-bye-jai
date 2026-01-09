@@ -182,7 +182,7 @@ export function MoodTrackerPage() {
                     stressLevel <= 3 ? '#22c55e' : stressLevel <= 6 ? '#eab308' : '#ef4444'
                   } 0%, ${
                     stressLevel <= 3 ? '#22c55e' : stressLevel <= 6 ? '#eab308' : '#ef4444'
-                  } ${stressLevel * 10}%, #e5e7eb ${stressLevel * 10}%, #e5e7eb 100%)`
+                  } ${((stressLevel - 1) / 9) * 100}%, #e5e7eb ${((stressLevel - 1) / 9) * 100}%, #e5e7eb 100%)`
                 }}
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-1">

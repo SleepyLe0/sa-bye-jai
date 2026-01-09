@@ -7,11 +7,13 @@ mod services;
 mod utils;
 
 use axum::{
+    http::HeaderValue,
     routing::{get, post},
     Router,
 };
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use std::env;
 
 #[tokio::main]
 async fn main() {
@@ -37,11 +39,29 @@ async fn main() {
         .await
         .expect("Failed to run migrations");
 
-    // Configure CORS
+    // Configure CORS - must specify exact origin when using credentials
+    let frontend_url = env::var("FRONTEND_URL")
+        .unwrap_or_else(|_| "http://localhost:3000".to_string());
+
     let cors = CorsLayer::new()
-        .allow_origin(Any)
-        .allow_methods(Any)
-        .allow_headers(Any);
+        .allow_origin(
+            frontend_url
+                .parse::<HeaderValue>()
+                .expect("Invalid FRONTEND_URL"),
+        )
+        .allow_methods([
+            axum::http::Method::GET,
+            axum::http::Method::POST,
+            axum::http::Method::PUT,
+            axum::http::Method::DELETE,
+            axum::http::Method::OPTIONS,
+        ])
+        .allow_headers([
+            axum::http::header::CONTENT_TYPE,
+            axum::http::header::AUTHORIZATION,
+            axum::http::header::ACCEPT,
+        ])
+        .allow_credentials(true);
 
     // Build protected routes that require authentication
     let protected_routes = Router::new()
@@ -70,6 +90,11 @@ async fn main() {
         )
         .route("/api/mood-tracker/recent", get(handlers::mood_tracker::get_recent))
         .route("/api/mood-tracker/stats", get(handlers::mood_tracker::get_stats))
+        // Stress reframe routes
+        .route(
+            "/api/stress-reframe",
+            get(handlers::stress_reframe::list).post(handlers::stress_reframe::create),
+        )
         .route_layer(axum::middleware::from_fn_with_state(
             pool.clone(),
             crate::middleware::auth::auth_middleware,
@@ -79,7 +104,9 @@ async fn main() {
     let public_routes = Router::new()
         .route("/health", get(health_check))
         .route("/api/auth/register", post(handlers::auth::register))
-        .route("/api/auth/login", post(handlers::auth::login));
+        .route("/api/auth/login", post(handlers::auth::login))
+        .route("/api/auth/refresh", post(handlers::auth::refresh))
+        .route("/api/auth/logout", post(handlers::auth::logout));
 
     // Combine routes
     let app = public_routes
