@@ -1,6 +1,9 @@
 # Build stage
 FROM node:20-alpine as builder
 
+# Accept build argument
+ARG VITE_API_BASE_URL=/api
+
 WORKDIR /app
 
 # Copy package files
@@ -12,7 +15,8 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application with environment variable
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 RUN npm run build
 
 # Production stage
