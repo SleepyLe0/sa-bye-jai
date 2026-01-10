@@ -18,7 +18,8 @@
     "search": "ค้นหา",
     "filter": "กรอง",
     "clear": "ล้าง",
-    "apply": "ใช้งาน"
+    "apply": "ใช้งาน",
+    "backToHome": "กลับหน้าแรก"
   },
   "navigation": {
     "home": "หน้าแรก",
@@ -146,7 +147,7 @@
     "stats": {
       "totalEntries": "รายการทั้งหมด",
       "moodEntries": "บันทึกอารมณ์",
-      "completedSessions": "เซสชั่นที่เสร็จสิ้น"
+      "completedSessions": "รายการที่ปรับมุมมองแล้ว"
     }
   },
   "theme": {

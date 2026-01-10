@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { ArrowLeft } from 'lucide-react';
 
 export function RegisterPage() {
   const { t } = useTranslation();
@@ -67,7 +68,12 @@ export function RegisterPage() {
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       </div>
 
-      <Card className="w-full max-w-md animate-in fade-in slide-in-from-bottom-8 duration-700">
+      <div className="w-full max-w-md">
+        <Link to="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-4 transition-colors">
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          {t('common.backToHome')}
+        </Link>
+        <Card className="w-full animate-in fade-in slide-in-from-bottom-8 duration-700">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center gradient-text">{t('auth.registerTitle')}</CardTitle>
           <CardDescription className="text-center">{t('auth.registerSubtitle')}</CardDescription>
@@ -151,6 +157,7 @@ export function RegisterPage() {
           </CardFooter>
         </form>
       </Card>
+      </div>
     </div>
   );
 }

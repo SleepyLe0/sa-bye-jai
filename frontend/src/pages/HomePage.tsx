@@ -37,6 +37,7 @@ export function HomePage() {
       {/* Hero Section */}
       <section className="flex-1 flex items-center justify-center px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <img src="/logo.svg" alt="SaByeJai" className="h-24 w-24 mx-auto mb-4" />
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight gradient-text">
             {t('common.appName')}
           </h1>

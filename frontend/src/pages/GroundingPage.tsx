@@ -132,7 +132,7 @@ export function GroundingPage() {
       case 'exhale':
         return 'bg-green-500';
       default:
-        return 'bg-gray-300 dark:bg-gray-700';
+        return 'bg-cyan-400 dark:bg-cyan-500';
     }
   };
 

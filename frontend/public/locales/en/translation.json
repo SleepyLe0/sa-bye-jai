@@ -18,7 +18,8 @@
     "search": "Search",
     "filter": "Filter",
     "clear": "Clear",
-    "apply": "Apply"
+    "apply": "Apply",
+    "backToHome": "Back to Home"
   },
   "navigation": {
     "home": "Home",
@@ -146,7 +147,7 @@
     "stats": {
       "totalEntries": "Total Entries",
       "moodEntries": "Mood Check-ins",
-      "completedSessions": "Completed Sessions"
+      "completedSessions": "Reframed Thoughts"
     }
   },
   "theme": {

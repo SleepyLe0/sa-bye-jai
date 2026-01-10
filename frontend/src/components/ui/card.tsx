@@ -9,7 +9,7 @@ const Card = React.forwardRef<
     ref={ref}
     data-cursor-magnetic
     className={cn(
-      "liquid-glass-hover rounded-3xl text-card-foreground",
+      "liquid-glass rounded-3xl text-card-foreground",
       className
     )}
     {...props}

@@ -41,7 +41,7 @@ const DialogContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "grid w-full gap-4 liquid-glass rounded-2xl p-6 shadow-2xl",
+        "grid w-full gap-4 liquid-glass-dialog rounded-2xl p-6 shadow-2xl",
         className
       )}
       {...props}

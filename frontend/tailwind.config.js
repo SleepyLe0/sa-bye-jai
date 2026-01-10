@@ -57,6 +57,7 @@ export default {
         'morph': 'morph 8s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'liquid-shimmer': 'liquid-shimmer 3s ease-in-out infinite',
+        'shimmer': 'shimmer 2s ease-in-out infinite',
       },
       keyframes: {
         gradient: {
@@ -99,6 +100,19 @@ export default {
           },
           '100%': {
             backgroundPosition: '200% 0',
+          },
+        },
+        'shimmer': {
+          '0%': {
+            transform: 'translateX(-100%)',
+            opacity: '0',
+          },
+          '50%': {
+            opacity: '0.5',
+          },
+          '100%': {
+            transform: 'translateX(100%)',
+            opacity: '0',
           },
         },
       },

@@ -1,14 +1,49 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Heart, Smile, Wind, ArrowRight } from 'lucide-react';
+import { mentalBoxService } from '@/services/mental-box.service';
+import { moodTrackerService } from '@/services/mood-tracker.service';
+import { stressReframeService } from '@/services/stress-reframe.service';
+
+interface DashboardStats {
+  totalEntries: number;
+  moodEntries: number;
+  completedSessions: number;
+}
 
 export function DashboardPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [stats, setStats] = useState<DashboardStats>({ totalEntries: 0, moodEntries: 0, completedSessions: 0 });
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoadingStats(true);
+        const [mentalBoxEntries, moodEntries, reframeSessions] = await Promise.all([
+          mentalBoxService.getAll(),
+          moodTrackerService.getAll(),
+          stressReframeService.getAll(),
+        ]);
+        setStats({
+          totalEntries: mentalBoxEntries.length,
+          moodEntries: moodEntries.length,
+          completedSessions: reframeSessions.length,
+        });
+      } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+    fetchStats();
+  }, []);
 
   const quickActions = [
     {
@@ -85,19 +120,37 @@ export function DashboardPage() {
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300">
             <CardHeader>
               <CardDescription>{t('dashboard.stats.totalEntries')}</CardDescription>
-              <CardTitle className="text-4xl font-bold gradient-text">0</CardTitle>
+              <CardTitle className="text-4xl font-bold gradient-text">
+                {loadingStats ? (
+                  <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                ) : (
+                  stats.totalEntries
+                )}
+              </CardTitle>
             </CardHeader>
           </Card>
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500">
             <CardHeader>
               <CardDescription>{t('dashboard.stats.moodEntries')}</CardDescription>
-              <CardTitle className="text-4xl font-bold gradient-text">0</CardTitle>
+              <CardTitle className="text-4xl font-bold gradient-text">
+                {loadingStats ? (
+                  <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                ) : (
+                  stats.moodEntries
+                )}
+              </CardTitle>
             </CardHeader>
           </Card>
           <Card className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700">
             <CardHeader>
               <CardDescription>{t('dashboard.stats.completedSessions')}</CardDescription>
-              <CardTitle className="text-4xl font-bold gradient-text">0</CardTitle>
+              <CardTitle className="text-4xl font-bold gradient-text">
+                {loadingStats ? (
+                  <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                ) : (
+                  stats.completedSessions
+                )}
+              </CardTitle>
             </CardHeader>
           </Card>
         </div>
