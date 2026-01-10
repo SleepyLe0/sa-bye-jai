@@ -62,8 +62,18 @@
     @apply border-border;
   }
 
+  html, body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
+  }
+
   body {
     font-family: 'Prompt', sans-serif;
+    touch-action: pan-y pinch-zoom;
     @apply bg-background text-foreground transition-colors duration-300;
     background-image:
       radial-gradient(at 0% 0%, hsl(var(--primary) / 0.1) 0px, transparent 50%),
