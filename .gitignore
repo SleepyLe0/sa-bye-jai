@@ -6,7 +6,6 @@
 
 # Backend (Rust)
 backend/target/
-backend/Cargo.lock
 backend/.env
 backend/.env.local
 
