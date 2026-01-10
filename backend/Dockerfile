@@ -1,5 +1,16 @@
-# Build stage
-FROM rust:latest as builder
+# Chef stage - prepare recipe
+FROM rust:latest AS chef
+RUN cargo install cargo-chef
+WORKDIR /app
+
+# Planner stage - analyze dependencies
+FROM chef AS planner
+COPY Cargo.toml Cargo.lock ./
+COPY src ./src
+RUN cargo chef prepare --recipe-path recipe.json
+
+# Build stage - cache dependencies separately
+FROM chef AS builder
 
 # Install required dependencies
 RUN apt-get update && apt-get install -y \
@@ -7,17 +18,16 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Create a new directory for the app
 WORKDIR /app
 
-# Copy manifests
-COPY Cargo.toml Cargo.lock ./
+# Build dependencies (this layer is cached unless dependencies change)
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
 
-# Copy source code
+# Copy source code and build app (only rebuilds when code changes)
+COPY Cargo.toml Cargo.lock ./
 COPY src ./src
 COPY migrations ./migrations
-
-# Build the application in release mode
 RUN cargo build --release
 
 # Runtime stage

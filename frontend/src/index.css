@@ -63,6 +63,7 @@
   }
 
   body {
+    font-family: 'Prompt', sans-serif;
     @apply bg-background text-foreground transition-colors duration-300;
     background-image:
       radial-gradient(at 0% 0%, hsl(var(--primary) / 0.1) 0px, transparent 50%),

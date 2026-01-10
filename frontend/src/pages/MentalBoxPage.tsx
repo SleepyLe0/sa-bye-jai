@@ -276,7 +276,13 @@ export function MentalBoxPage() {
       </Dialog>
 
       {/* Add Entry Dialog - Mobile Optimized */}
-      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+      <Dialog open={isAddDialogOpen} onOpenChange={(open) => {
+        setIsAddDialogOpen(open);
+        if (!open) {
+          setNewEntry({ title: '', content: '' });
+          setError('');
+        }
+      }}>
         <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-lg">{t('mentalBox.addEntry')}</DialogTitle>
@@ -284,7 +290,9 @@ export function MentalBoxPage() {
           </DialogHeader>
           <form onSubmit={handleAddEntry} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-sm font-medium">{t('mentalBox.entryTitle')}</Label>
+              <Label htmlFor="title" className="text-sm font-medium">
+                {t('mentalBox.entryTitle')} <span className="text-destructive">*</span>
+              </Label>
               <input
                 id="title"
                 type="text"
@@ -293,10 +301,13 @@ export function MentalBoxPage() {
                 className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder={t('mentalBox.titlePlaceholder')}
                 disabled={submitting}
+                required
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="content" className="text-sm font-medium">{t('mentalBox.entryContent')}</Label>
+              <Label htmlFor="content" className="text-sm font-medium">
+                {t('mentalBox.entryContent')} <span className="text-destructive">*</span>
+              </Label>
               <Textarea
                 id="content"
                 value={newEntry.content}
@@ -305,19 +316,28 @@ export function MentalBoxPage() {
                 rows={6}
                 disabled={submitting}
                 className="text-base resize-none"
+                required
               />
             </div>
             <DialogFooter className="flex-col sm:flex-row gap-2">
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setIsAddDialogOpen(false)}
+                onClick={() => {
+                  setIsAddDialogOpen(false);
+                  setNewEntry({ title: '', content: '' });
+                  setError('');
+                }}
                 disabled={submitting}
                 className="w-full h-12"
               >
                 {t('common.cancel')}
               </Button>
-              <Button type="submit" disabled={submitting} className="w-full h-12">
+              <Button
+                type="submit"
+                disabled={submitting || !newEntry.title.trim() || !newEntry.content.trim()}
+                className="w-full h-12"
+              >
                 {submitting ? t('common.saving') : t('common.save')}
               </Button>
             </DialogFooter>
