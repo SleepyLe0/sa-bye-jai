@@ -62,13 +62,19 @@ export function Header() {
     }
   }, [location.pathname]);
 
-  // Update indicator position when route changes
+  // Update indicator position when route or language changes
   useEffect(() => {
-    updateIndicatorPosition();
-    // Also update on window resize
+    // Small delay to allow text to render with new language
+    const timer = setTimeout(() => {
+      updateIndicatorPosition();
+    }, 50);
+    
     window.addEventListener('resize', updateIndicatorPosition);
-    return () => window.removeEventListener('resize', updateIndicatorPosition);
-  }, [updateIndicatorPosition]);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateIndicatorPosition);
+    };
+  }, [updateIndicatorPosition, i18n.language]);
 
   return (
     <header className="sticky top-0 z-50 w-full md:flex md:justify-center liquid-glass border-b border-white/20">
